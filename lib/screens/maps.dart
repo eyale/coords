@@ -4,6 +4,10 @@ import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/cupertino.dart';
 
+import './widgets/no_location_data.dart';
+import './widgets/location_tile.dart';
+import './widgets/custom_icon_button.dart';
+
 class MapsScreen extends StatefulWidget {
   const MapsScreen({Key? key}) : super(key: key);
 
@@ -13,6 +17,7 @@ class MapsScreen extends StatefulWidget {
 
 class _MapsScreenState extends State<MapsScreen> {
   LocationData? _locationData;
+  Location location = Location();
 
   bool _isLoading = false;
 
@@ -20,7 +25,6 @@ class _MapsScreenState extends State<MapsScreen> {
     setState(() {
       _isLoading = !_isLoading;
     });
-    Location location = Location();
 
     bool serviceEnabled;
     PermissionStatus permissionGranted;
@@ -50,7 +54,7 @@ class _MapsScreenState extends State<MapsScreen> {
     });
   }
 
-  Future _onShare(BuildContext context) async {
+  Future _onShare() async {
     final box = context.findRenderObject() as RenderBox?;
     debugPrint('box.size: ${box!.size.width.toDouble()}');
 
@@ -128,113 +132,34 @@ class _MapsScreenState extends State<MapsScreen> {
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _locationData == null
-              ? Center(
-                  child: SizedBox(
-                    height: 150,
-                    child: Column(
-                      children: [
-                        Icon(
-                          Icons.warning,
-                          color: Theme.of(context).colorScheme.primary,
-                          size: 50,
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        const Text(
-                          'There is no coordinates',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                              color: Colors.grey),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        ElevatedButton.icon(
-                          icon: const Icon(
-                            Icons.map_outlined,
-                            size: 30,
-                            color: Colors.white,
-                          ),
-                          label: const Text('GET MY LOCATION'),
-                          onPressed: _getLocation,
-                        ),
-                      ],
-                    ),
-                  ),
-                )
+              ? NoLocationData(handleTapGetLocation: _getLocation)
               : SafeArea(
                   child: Padding(
                     padding: const EdgeInsets.all(20),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        ListTile(
-                          leading: Icon(
-                            Icons.near_me,
-                            color: Theme.of(context).colorScheme.secondary,
-                          ),
-                          title: Text(
-                            'Your location is:',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Theme.of(context).colorScheme.primary,
-                              fontSize: 20,
-                            ),
-                          ),
-                          subtitle: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 5),
-                            child: Text(
-                              'Latitude: ${_locationData!.latitude},\nLongitude: ${_locationData!.longitude}',
-                              style: TextStyle(
-                                fontSize: 18,
-                                color: Theme.of(context).colorScheme.secondary,
-                              ),
-                            ),
-                          ),
-                        ),
+                        LocationTile(locationData: _locationData),
                         SizedBox(
                           width: double.infinity,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              SizedBox(
-                                width: double.infinity,
-                                child: ElevatedButton.icon(
-                                  icon: const Icon(
-                                    Icons.refresh,
-                                    size: 20,
-                                    color: Colors.white,
-                                  ),
-                                  label: const Text('Retake location'),
-                                  onPressed: _getLocation,
-                                ),
+                              CustomIconButton(
+                                title: 'Retake location',
+                                handleTap: _getLocation,
+                                iconName: Icons.refresh,
                               ),
-                              SizedBox(
-                                width: double.infinity,
-                                child: ElevatedButton.icon(
-                                  icon: const Icon(
-                                    Icons.pin_drop,
-                                    size: 20,
-                                    color: Colors.white,
-                                  ),
-                                  label: const Text('Open in Maps'),
-                                  onPressed: () => _launchMapsUrl(),
-                                ),
+                              CustomIconButton(
+                                title: 'Open in Maps',
+                                handleTap: _launchMapsUrl,
+                                iconName: Icons.pin_drop,
                               ),
-                              SizedBox(
-                                width: double.infinity,
-                                child: ElevatedButton.icon(
-                                  icon: const Icon(
-                                    Icons.ios_share,
-                                    size: 20,
-                                    color: Colors.white,
-                                  ),
-                                  label: const Text('Share'),
-                                  onPressed: () => _onShare(context),
-                                ),
+                              CustomIconButton(
+                                title: 'Share',
+                                handleTap: _onShare,
+                                iconName: Icons.ios_share,
                               ),
                             ],
                           ),
