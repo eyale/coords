@@ -14,15 +14,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
       theme: ThemeData(
         pageTransitionsTheme: const PageTransitionsTheme(builders: {
           TargetPlatform.android: CupertinoPageTransitionsBuilder(),
         }),
         colorScheme: ColorScheme.fromSwatch().copyWith(
           primary: const Color.fromARGB(255, 16, 69, 92),
-          secondary: Colors.teal.shade100,
+          secondary: const Color.fromARGB(255, 213, 120, 120),
         ),
+        fontFamily: 'Roboto',
       ),
       home: const MapsScreen(),
     );

@@ -173,22 +173,23 @@ class _MapsScreenState extends State<MapsScreen> {
                         ListTile(
                           leading: Icon(
                             Icons.near_me,
-                            color: Theme.of(context).colorScheme.primary,
+                            color: Theme.of(context).colorScheme.secondary,
                           ),
-                          title: const Text(
+                          title: Text(
                             'Your location is:',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
+                              color: Theme.of(context).colorScheme.primary,
                               fontSize: 20,
                             ),
                           ),
                           subtitle: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 5),
                             child: Text(
-                              'Latitude: ${_locationData!.latitude},\nLatitude: ${_locationData!.longitude}',
-                              style: const TextStyle(
-                                fontSize: 16,
-                                color: Colors.grey,
+                              'Latitude: ${_locationData!.latitude},\nLongitude: ${_locationData!.longitude}',
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Theme.of(context).colorScheme.secondary,
                               ),
                             ),
                           ),
@@ -199,32 +200,41 @@ class _MapsScreenState extends State<MapsScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              ElevatedButton.icon(
-                                icon: const Icon(
-                                  Icons.refresh,
-                                  size: 20,
-                                  color: Colors.white,
+                              SizedBox(
+                                width: double.infinity,
+                                child: ElevatedButton.icon(
+                                  icon: const Icon(
+                                    Icons.refresh,
+                                    size: 20,
+                                    color: Colors.white,
+                                  ),
+                                  label: const Text('Retake location'),
+                                  onPressed: _getLocation,
                                 ),
-                                label: const Text('Retake location'),
-                                onPressed: _getLocation,
                               ),
-                              ElevatedButton.icon(
-                                icon: const Icon(
-                                  Icons.pin_drop,
-                                  size: 20,
-                                  color: Colors.white,
+                              SizedBox(
+                                width: double.infinity,
+                                child: ElevatedButton.icon(
+                                  icon: const Icon(
+                                    Icons.pin_drop,
+                                    size: 20,
+                                    color: Colors.white,
+                                  ),
+                                  label: const Text('Open in Maps'),
+                                  onPressed: () => _launchMapsUrl(),
                                 ),
-                                label: const Text('Open in Maps'),
-                                onPressed: () => _launchMapsUrl(),
                               ),
-                              ElevatedButton.icon(
-                                icon: const Icon(
-                                  Icons.ios_share,
-                                  size: 20,
-                                  color: Colors.white,
+                              SizedBox(
+                                width: double.infinity,
+                                child: ElevatedButton.icon(
+                                  icon: const Icon(
+                                    Icons.ios_share,
+                                    size: 20,
+                                    color: Colors.white,
+                                  ),
+                                  label: const Text('Share'),
+                                  onPressed: () => _onShare(context),
                                 ),
-                                label: const Text('Share'),
-                                onPressed: () => _onShare(context),
                               ),
                             ],
                           ),
